@@ -1,0 +1,15 @@
+# Copyright (c) Boucher Lab. All rights reserved.
+# Licensed under the GNU license.
+# See LICENSE file in the repository root for full license information.
+
+name: deduplication
+channels:
+  - conda-forge
+  - bioconda
+  - anaconda
+dependencies:
+  - biopython
+  - python=3.7
+  - blat
+  - scipy
+  - scikit-learn

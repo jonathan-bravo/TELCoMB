@@ -1,0 +1,12 @@
+# Copyright (c) Boucher Lab. All rights reserved.
+# Licensed under the GNU license.
+# See LICENSE file in the repository root for full license information.
+
+name: alignment
+channels:
+  - conda-forge
+  - bioconda
+  - anaconda
+dependencies:
+  - python=3.8
+  - minimap2
