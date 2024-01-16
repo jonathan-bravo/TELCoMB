@@ -35,24 +35,14 @@
     "OVERLAP_AMR_THRESHOLD" : 0.8,
     "GLOBAL_AMR_THRESHOLD" : 0.8,
     "GLOBAL_MGE_THRESHOLD" : 0.5,
-    "GLOBAL_KEGG_THRESHOLD" : 0.5,
     "GLOBAL_AMR_THRESHOLD_COLOCALIZATIONS" : 0.8,
     "GLOBAL_MGE_THRESHOLD_COLOCALIZATIONS" : 0.5,
-    "GLOBAL_KEGG_THRESHOLD_COLOCALIZATIONS" : 0.5,
-    "DEDUP_CLUSTERS" : 200,
-    "BLAT_THREADS" : 4,
     "DEDUPLICATION_SIMILARITY_THRESHOLD" : 0.9,
     "RESISTOME_STRATEGY" : "SHORT",
     "MOBILOME_STRATEGY" : "SHORT",
     "OVERLAP_THRESHOLD_STRATEGY" : "ONE",
     "USE_SECONDARY_ALIGNMENTS" : "True",
     "MAX_BP_COLOCALIZATIONS_PLOT" : 5000,
-    "KEGG_ORGANISMS" : ["dme", "ath", "sce", "pfa", "eco",
-                        "sty", "hin", "pae", "nme", "hpy",
-                        "rpr", "mlo", "bsu", "sau", "lla",
-                        "spn", "cac", "mge", "mtu", "ctr",
-                        "bbu", "syn", "aae", "mja", "afu",
-                        "pho", "ape"],
     "PLASMID_FINDER_COMMIT" : "1307168b1ce7418b9f7aa9a017ab3c8eb55bc595"
   },
 
@@ -63,6 +53,11 @@
     "ALIGNER_ONT_OPTION" : "",
     "ALIGNER_HIFI_OPTION" : "",
     "THREADS" : 12
+  },
+
+  "BLAT" :
+  {
+    "THREADS" : 32
   },
 
   "SPADES" :
