@@ -76,7 +76,7 @@ rule blat_clustered_reads:
         o = tmp_dir + "/{sample_name}_psl_files/",
         blat_script = workflow.basedir + "/" + config["SCRIPTS"]["RUN_BLAT"]
     threads:
-        32
+        config["BLAT"]["THREADS"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DEDUP"]
     shell:
