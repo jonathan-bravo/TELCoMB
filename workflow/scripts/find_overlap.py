@@ -42,7 +42,7 @@ def overlap_finder(config, single):
     mgeSAM = pysam.AlignmentFile(config['INPUT']['MGES_SAM_FILE'])
     for read in mgeSAM.fetch():
         if read.is_unmapped: continue
-        if config['MISC']['USE_SECONDARY_ALIGNMENTS'] not in ['True', 'true'] and read.is_secondary: continue
+        if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
         if read.query_name not in read_mge_alignments:
             read_mge_alignments[read.query_name] = list()
         read_mge_alignments[read.query_name].append(((read.query_alignment_start, read.query_alignment_end),
@@ -55,7 +55,7 @@ def overlap_finder(config, single):
     argSAM = pysam.AlignmentFile(config['INPUT']['ARGS_SAM_FILE'])
     for read in argSAM.fetch():
         if read.is_unmapped: continue
-        if config['MISC']['USE_SECONDARY_ALIGNMENTS'] not in ['True', 'true'] and read.is_secondary: continue
+        if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
         if read.query_name not in read_arg_alignments:
             read_arg_alignments[read.query_name] = list()
         read_arg_alignments[read.query_name].append(((read.query_alignment_start, read.query_alignment_end),
