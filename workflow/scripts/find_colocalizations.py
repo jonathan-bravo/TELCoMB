@@ -68,12 +68,11 @@ def get_colocalizations(config, reads_file_path, to_megares_path, to_mges_path):
     amr_length = dict()
     with pysam.AlignmentFile(to_megares_path, "r") as to_megares_samfile:
         for read in to_megares_samfile:
-            if read.is_unmapped:
-                continue
+            if read.is_unmapped: continue
 
-            # if config['MISC']['USE_SECONDARY_ALIGNMENTS'] not in ['True', 'true'] and read.is_secondary:
-            if read.is_secondary:
-                continue
+            if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
+            # if read.is_secondary:
+            #     continue
 
             # Check coverage
             if (read.reference_length / (megares_gene_lengths[read.reference_name])) > float(config['MISC']['GLOBAL_AMR_THRESHOLD_COLOCALIZATIONS']):
@@ -90,43 +89,17 @@ def get_colocalizations(config, reads_file_path, to_megares_path, to_mges_path):
                 else:
                     amr_to_generated_bases[read.reference_name] += read.reference_length
 
-    # # Open aligned to Kegg
-    # logger.info("Reading KEGG alignment files")
-    # kegg_positions = dict()
-    # read_to_kegg = dict()
-    # try:
-    #     with pysam.AlignmentFile(to_kegg_path, "r") as to_kegg_samfile:
-    #         for read in to_kegg_samfile:
-    #             if read.is_unmapped:
-    #                 continue
-
-    #             # if config['MISC']['USE_SECONDARY_ALIGNMENTS'] not in ['True', 'true'] and read.is_secondary:
-    #             if read.is_secondary:
-    #                 continue
-
-    #             # Check coverage
-    #             if (read.reference_length / (kegg_gene_lengths[read.reference_name])) > float(config['MISC']['GLOBAL_KEGG_THRESHOLD_COLOCALIZATIONS']):
-    #                 if read.query_name not in read_to_kegg:
-    #                     read_to_kegg[read.query_name] = list()
-    #                     kegg_positions[read.query_name] = list()
-    #                 kegg_positions[read.query_name].append([read.query_alignment_start, read.query_alignment_end])
-    #                 read_to_kegg[read.query_name].append(read.reference_name)
-    # except ValueError:
-    #     pass
-    #     # print("--- Skipped KEGG ---")
-
     # Open aligned to MGEs
     logger.info("Reading MGEs alignment files")
     mge_positions = dict()
     read_to_mges = dict()
     with pysam.AlignmentFile(to_mges_path, "r") as mge_alignment_file:
         for read in mge_alignment_file:
-            if read.is_unmapped:
-                continue
+            if read.is_unmapped: continue
 
-            # if config['MISC']['USE_SECONDARY_ALIGNMENTS'] not in ['True', 'true'] and read.is_secondary:
-            if read.is_secondary:
-                continue
+            if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
+            # if read.is_secondary:
+            #     continue
 
             if read.reference_name in overlapped_mges: continue
 
