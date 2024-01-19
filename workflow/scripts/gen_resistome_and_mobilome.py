@@ -40,11 +40,9 @@ def long_reads_strategy_resistome(config):
     reads_aligned = set()
     genes_per_read = dict()
     for read in sam_file.fetch():
-        if read.is_unmapped:
-            continue
+        if read.is_unmapped: continue
 
-        if config['MISC']['USE_SECONDARY_ALIGNMENTS'] not in ['True', 'true'] and read.is_secondary:
-            continue
+        if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
 
         # check coverage
         if (float(read.reference_length) / megares_gene_lengths[read.reference_name]) > float(
@@ -196,11 +194,9 @@ def short_reads_strategy_resistome(config):
     reads_aligned_per_gene = dict()
     # Iterate through every read. Accumulate number of reads while recording read length
     for read in sam_file.fetch():
-        if read.is_unmapped:
-            continue
+        if read.is_unmapped: continue
 
-        if config['MISC']['USE_SECONDARY_ALIGNMENTS'] not in ['True', 'true'] and read.is_secondary:
-            continue
+        if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
 
         classname = megares_ontology[read.reference_name]["class"]
         mech = megares_ontology[read.reference_name]["mechanism"]
@@ -382,11 +378,9 @@ def long_reads_strategy_mobilome(config, AMR_mapped_regions_per_read):
     reads_aligned = set()
     # Iterate through every aligned segment
     for read in mges_sam_file.fetch():
-        if read.is_unmapped:
-            continue
+        if read.is_unmapped: continue
 
-        if config['MISC']['USE_SECONDARY_ALIGNMENTS'] not in ['True', 'true'] and read.is_secondary:
-            continue
+        if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
 
         if read.reference_name in overlapped_mges: continue
 
@@ -473,11 +467,9 @@ def short_reads_strategy_mobilome(config, AMR_mapped_regions_per_read):
     reads_aligned_per_gene = dict()
     # Iterate through every read. Accumulate number of reads aligned and number of alignments per aclame mge
     for read in mges_sam_file.fetch():
-        if read.is_unmapped:
-            continue
+        if read.is_unmapped: continue
 
-        if config['MISC']['USE_SECONDARY_ALIGNMENTS'] not in ['True', 'true'] and read.is_secondary:
-            continue
+        if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
 
         if read.reference_name in overlapped_mges: continue
 
