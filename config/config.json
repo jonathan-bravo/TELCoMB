@@ -13,9 +13,8 @@
     "DEDUPLICATED" : "_deduplicated.fastq",
     "NOT_DEDUPLICATED" : "_NOT_deduplicated.fastq",
     "ASSEMBLED" : "_assembled.fastq",
-    "A_TO_MEGARES" : "_ato_megaresv2.sam",
+    "A_TO_MEGARES" : "_ato_megares.sam",
     "A_TO_MGES" : "_ato_MGES.sam",
-    "A_TO_KEGG" : "_ato_KEGG.sam",
     "RESISTOME_DIVERSITY" : "_amr_diversity.csv",
     "RESISTOME_RICHNESS" : "_amr_richness.csv",
     "OVERLAP" : "_overlaped_mges.csv",
@@ -28,8 +27,6 @@
 
   "MISC" :
   {
-    "V2_SKIP_BEGIN" : 3,
-    "V2_SKIP_END" : 66,
     "OVERLAP_THRESHOLD" : 0.5,
     "OVERLAP_MGE_THRESHOLD" : 0.5,
     "OVERLAP_AMR_THRESHOLD" : 0.8,
@@ -41,7 +38,7 @@
     "RESISTOME_STRATEGY" : "SHORT",
     "MOBILOME_STRATEGY" : "SHORT",
     "OVERLAP_THRESHOLD_STRATEGY" : "ONE",
-    "USE_SECONDARY_ALIGNMENTS" : "True",
+    "USE_SECONDARY_ALIGNMENTS" : "true",
     "MAX_BP_COLOCALIZATIONS_PLOT" : 5000,
     "PLASMID_FINDER_COMMIT" : "1307168b1ce7418b9f7aa9a017ab3c8eb55bc595"
   },
@@ -78,7 +75,6 @@
     "FIND_COLOCALIZATIONS" : "workflow/scripts/find_colocalizations.py",
     "COLOCALIZATIONS_RICHNESS" : "workflow/scripts/colocalization_richness.py",
     "READS_LENGTH" : "workflow/scripts/read_lengths.py",
-    "DOWNLOAD_KEGG" : "workflow/scripts/download_kegg.py",
     "BIN_READS" : "workflow/scripts/bin_reads.py",
     "RUN_BLAT" : "workflow/scripts/run_blat.py",
     "FIND_OVERLAP" : "workflow/scripts/find_overlap.py",
@@ -94,11 +90,6 @@
     "DB" : "workflow/envs/download_databases.yaml",
     "PIPELINE" : "workflow/envs/pipeline.yaml",
     "PLOTS" : "workflow/envs/plots.yaml"
-  },
-
-  "STATS" :
-  {
-    "GET_STATS" : "True"
   }
 }
 
