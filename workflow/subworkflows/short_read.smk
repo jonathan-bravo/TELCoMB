@@ -32,6 +32,8 @@ rule meta_spades_assembly:
         workflow.basedir + "/" + config["CONDA"]["ASSEMBLY"]
     threads:
         config["SPADES"]["THREADS"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.assembly.benchmark" 
     shell:
         "spades.py --meta "
         "--phred-offset {params.phred} "
@@ -56,5 +58,7 @@ rule read_lengths:
         read_lengths_script = workflow.basedir + "/" + config["SCRIPTS"]["READS_LENGTH"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["ASSEMBLY"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.rl.benchmark" 
     shell:
         "python {params.read_lengths_script} {input} > {output}"

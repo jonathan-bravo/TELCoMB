@@ -68,13 +68,13 @@ rule align_to_megares:
     output:
         "{sample_name}" + DEDUP_STRING + config["EXTENSION"]["A_TO_MEGARES"]
     params:
-        minimap_flags = config["MINIMAP2"]["ALIGNER_PB_OPTION"] + " "
-                        + config["MINIMAP2"]["ALIGNER_ONT_OPTION"] + " "
-                        + config["MINIMAP2"]["ALIGNER_HIFI_OPTION"]
+        minimap_flags = config["MINIMAP2"]["ALIGNER_OPTIONS"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["ALIGNMENT"]
     threads:
         config["MINIMAP2"]["THREADS"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.ato_megares.benchmark" 
     shell:
         "minimap2 -Y "
         "-t {threads} "
@@ -91,13 +91,13 @@ rule align_to_mges:
     output:
         "{sample_name}" + DEDUP_STRING + config["EXTENSION"]["A_TO_MGES"]
     params:
-        minimap_flags = config["MINIMAP2"]["ALIGNER_PB_OPTION"] + " "
-                        + config["MINIMAP2"]["ALIGNER_ONT_OPTION"] + " "
-                        + config["MINIMAP2"]["ALIGNER_HIFI_OPTION"]
+        minimap_flags = config["MINIMAP2"]["ALIGNER_OPTIONS"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["ALIGNMENT"]
     threads:
         config["MINIMAP2"]["THREADS"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.ato_mges.benchmark" 
     shell:
         "minimap2 -Y "
         "-t {threads} "
@@ -109,6 +109,8 @@ rule align_to_mges:
 rule pass_config_file:
     output:
         out_config_file = "config.ini"
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".config.benchmark" 
     # conda:
     #     workflow.basedir + "/" + config["CONDA"]["PIPELINE"]
     run:
@@ -137,6 +139,8 @@ rule overlap:
         workflow.basedir + "/" + config["CONDA"]["PIPELINE"]
     output:
         overlap = "{sample_name}" + DEDUP_STRING + config['EXTENSION']['OVERLAP']
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.overlap.benchmark" 
     shell:
         "python {params.overlap_script} "
         "-r {wildcards.sample_name}.fastq "
@@ -150,6 +154,8 @@ rule merge_overlap_info:
         expand("{sample_name}" + DEDUP_STRING + config['EXTENSION']['OVERLAP'], sample_name = SAMPLES)
     output: 
         merged_info = 'merged_overlaped_mges_info.csv'
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".merge_overlap.benchmark" 
     # conda:
     #     workflow.basedir + "/" + config["CONDA"]["PIPELINE"]
     run:
@@ -184,6 +190,8 @@ rule resistome_and_mobilome:
         output_prefix = "{sample_name}" + DEDUP_STRING
     conda:
         workflow.basedir + "/" + config["CONDA"]["PIPELINE"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.resistome_and_mobilome.benchmark" 
     shell:
         "python {params.resistome_mobilome_script} "
         "-r {wildcards.sample_name}.fastq "
@@ -204,12 +212,15 @@ rule find_colocalizations:
         overlap = "{sample_name}" + DEDUP_STRING + config['EXTENSION']['OVERLAP'],
         config_file = "config.ini"
     output:
-        "{sample_name}" + DEDUP_STRING + config["EXTENSION"]["COLOCALIZATIONS"]
+        colocalizations = "{sample_name}" + DEDUP_STRING + config["EXTENSION"]["COLOCALIZATIONS"],
+        genes_list = "{sample_name}" + DEDUP_STRING + config["EXTENSION"]["GENES_LIST"]
     params:
         find_colocalizations_script = workflow.basedir + "/" + config["SCRIPTS"]["FIND_COLOCALIZATIONS"],
         output_directory = os.getcwd()
     conda:
         workflow.basedir + "/" + config["CONDA"]["PIPELINE"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.find_colocalizations.benchmark" 
     shell:
         "python {params.find_colocalizations_script} "
         "-r {input.reads} "
@@ -218,7 +229,7 @@ rule find_colocalizations:
         "-s {input.overlap} "
         "-c {input.config_file} "
         "-o {params.output_directory} "
-        "> {output}"
+        "> {output.colocalizations}"
 
 rule colocalization_richness:
     input:
@@ -230,6 +241,8 @@ rule colocalization_richness:
         find_colocalizations_script = workflow.basedir + "/" + config["SCRIPTS"]["COLOCALIZATIONS_RICHNESS"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["PIPELINE"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.colocalization_richness.benchmark" 
     shell:
         "python {params.find_colocalizations_script} "
         "-i {input.colocalizations} "
@@ -252,6 +265,8 @@ rule read_lengths_plot:
         read_lengths_script = workflow.basedir + "/" + config["SCRIPTS"]["PLOT_RL"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["PLOTS"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.rl_plot.benchmark" 
     shell:
         "{params.read_lengths_script} "
         "-i {input} "
@@ -274,6 +289,8 @@ rule violin_plots_notebook:
         script = workflow.basedir + "/workflow/scripts/violin_notebook.py"
     conda:
         workflow.basedir + "/" + config["CONDA"]["PLOTS"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".violoin_plot.benchmark" 
     shell:
         "{params.script} "
         "--dedup_string {params.dedup_string} "
@@ -298,6 +315,8 @@ rule heatmap_notebook:
         script = workflow.basedir +  "/workflow/scripts/heatmap_notebook.py"
     conda:
         workflow.basedir + "/" + config["CONDA"]["PLOTS"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".heatmap.benchmark" 
     shell:
         "{params.script} "
         "--dedup_string {params.dedup_string} "
@@ -322,6 +341,8 @@ rule colocalization_visualizations_notebook:
         script = workflow.basedir + "/workflow/scripts/colocalizations_notebook.py"
     conda:
         workflow.basedir + "/" + config["CONDA"]["PLOTS"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.colocalization_plot.benchmark" 
     shell:
         "{params.script} "
         "--config_file {input.config_file} "
@@ -344,6 +365,8 @@ rule get_megares:
         megares_ann = "https://www.meglab.org/downloads/megares_v3.00/megares_annotations_v3.00.csv"
     conda:
         workflow.basedir + "/" + config["CONDA"]["DB"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".get_megares.benchmark" 
     shell:
         "mkdir -p {databases_dir}; "
         "wget {params.megares_seqs} -O {output.megares_seqs}; "
@@ -359,6 +382,8 @@ rule get_plasmid_finder_db:
         temp(databases_dir + "/plasmid_finder_db.fasta")
     conda:
         workflow.basedir + "/" + config["CONDA"]["DB"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".get_pf.benchmark"
     shell:
         "mkdir -p {tmp_dir}; "
         "mkdir -p {databases_dir}; "
@@ -367,7 +392,8 @@ rule get_plasmid_finder_db:
         "cd plasmidfinder_db; "
         "git checkout {params.commit}; "
         "cd ../..; "
-        "cat tmp/plasmidfinder_db/*.fsa > {output}"
+        "cat tmp/plasmidfinder_db/*.fsa > {output}; "
+        "rm -rf tmp/plasmidfinder_db"
 
 rule get_aclame_db:
     output:
@@ -376,6 +402,8 @@ rule get_aclame_db:
         aclame = "https://drive.google.com/file/d/1ipiFom9ha_87k-bNzK_nIM4ABO1l_WP9/view?usp=sharing"
     conda:
         workflow.basedir + "/" + config["CONDA"]["DB"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".get_aclame.benchmark"
     shell:
         "mkdir -p {databases_dir}; "
         "gdown {params.aclame} --fuzzy -O {output}"
@@ -387,6 +415,8 @@ rule get_iceberg_db:
         iceberg = "https://drive.google.com/file/d/14MNE_738gIgmQU68y-529DitW_zqxIXy/view?usp=sharing"
     conda:
         workflow.basedir + "/" + config["CONDA"]["DB"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".get_iceberg.benchmark"
     shell:
         "mkdir -p {databases_dir}; "
         "gdown {params.iceberg} --fuzzy -O {output}"
@@ -400,6 +430,8 @@ rule get_MGEs_DBs:
         databases_dir + "/mges_combined.fasta"
     conda:
         workflow.basedir + "/" + config["CONDA"]["DB"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".get_mges.benchmark"
     shell:
         "cat {input} > {output}"
 

@@ -24,6 +24,8 @@ rule read_lengths:
         read_lengths_script = workflow.basedir + "/" + config["SCRIPTS"]["READS_LENGTH"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DEDUP"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.rl.benchmark" 
     shell:
         "echo {input}; "
         "python {params.read_lengths_script} {input} > {output}"
@@ -41,6 +43,8 @@ rule bin_reads_by_length:
         bin_script = workflow.basedir + "/" + config["SCRIPTS"]["BIN_READS"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DEDUP"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.bin_reads.benchmark" 
     shell:
         "mkdir -p {params.outdir}; "
         "{params.bin_script} "
@@ -58,6 +62,8 @@ rule cluster_reads:
         cluster_script = workflow.basedir + "/" + config["SCRIPTS"]["CLUSTER_READS"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DEDUP"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.cluster_reads.benchmark" 
     shell:
         "mkdir -p {params.outdir}; "
         "{params.cluster_script} "
@@ -79,6 +85,8 @@ rule blat_clustered_reads:
         config["BLAT"]["THREADS"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DEDUP"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.blat.benchmark" 
     shell:
         "mkdir -p {params.o}; "
         "{params.blat_script} "
@@ -100,6 +108,8 @@ rule find_duplicates:
         find_dups_script = workflow.basedir + "/" + config["SCRIPTS"]["FIND_DUPLICATES"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DEDUP"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.find_dupes.benchmark" 
     shell:
         "mkdir -p {params.outdir}; "
         "{params.find_dups_script} "
@@ -118,6 +128,8 @@ rule merge_duplicates_lists:
         indir = tmp_dir + "/{sample_name}_duplicate_txts/"
     conda:
         workflow.basedir + "/" + config["CONDA"]["DEDUP"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.merge_dupes.benchmark" 
     shell:
         "cat {params.indir}/* > {output}; "
         "rm -rf {params.indir}"
@@ -134,6 +146,8 @@ rule deduplicate:
         dedup_script = workflow.basedir + "/" + config["SCRIPTS"]["DEDUPLICATE"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DEDUP"]
+    benchmark:
+        workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.dedup.benchmark" 
     shell:
         "{params.dedup_script} "
         "--reads {input.reads} "
