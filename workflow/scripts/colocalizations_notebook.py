@@ -154,7 +154,7 @@ def main():
 
     plt.legend(newHandles, newLabels)
     plt.savefig(output_plot)
-    plt.show()
+    #plt.show()
 
 
 if __name__ == '__main__':
