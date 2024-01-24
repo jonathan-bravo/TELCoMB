@@ -45,10 +45,7 @@
 
   "MINIMAP2" :
   {
-    "PROFILER" : "/usr/bin/time --verbose",
-    "ALIGNER_PB_OPTION" : "-ax map-pb",
-    "ALIGNER_ONT_OPTION" : "",
-    "ALIGNER_HIFI_OPTION" : "",
+    "ALIGNER_OPTIONS" : "-ax map-pb",
     "THREADS" : 12
   },
 
