@@ -40,9 +40,9 @@ EXTS = [
     DEDUP_STRING + config["EXTENSION"]["COLOCALIZATIONS"],
     DEDUP_STRING + config["EXTENSION"]["COLOCALIZATIONS_RICHNESS"],
     DEDUP_STRING + config['EXTENSION']['OVERLAP'],
-    DEDUP_STRING + "_" + config["MISC"]["RESISTOME_STRATEGY"] + config["EXTENSION"]["RESISTOME_RICHNESS"],
-    DEDUP_STRING + "_" + config["MISC"]["RESISTOME_STRATEGY"] + config["EXTENSION"]["RESISTOME_DIVERSITY"],
-    DEDUP_STRING + "_" + config["MISC"]["MOBILOME_STRATEGY"] + config["EXTENSION"]["MOBILOME"],
+    DEDUP_STRING + config["EXTENSION"]["RESISTOME_RICHNESS"],
+    DEDUP_STRING + config["EXTENSION"]["RESISTOME_DIVERSITY"],
+    DEDUP_STRING + config["EXTENSION"]["MOBILOME"],
     "_deduplicated_read_lengts_hist.pdf",
     "_colocalizations_plot.svg"]
 
@@ -180,11 +180,9 @@ rule resistome_and_mobilome:
         overlap = "{sample_name}" + DEDUP_STRING + config['EXTENSION']['OVERLAP'],
         config_file = "config.ini"
     output:
-        resistome_richness = "{sample_name}" + DEDUP_STRING + "_" + config["MISC"]["RESISTOME_STRATEGY"]
-                                                    + config["EXTENSION"]["RESISTOME_RICHNESS"],
-        resistome_diversity = "{sample_name}" + DEDUP_STRING + "_" + config["MISC"]["RESISTOME_STRATEGY"]
-                                                     + config["EXTENSION"]["RESISTOME_DIVERSITY"],
-        mobilome = "{sample_name}" + DEDUP_STRING + "_" + config["MISC"]["MOBILOME_STRATEGY"] + config["EXTENSION"]["MOBILOME"]
+        resistome_richness = "{sample_name}" + DEDUP_STRING + config["EXTENSION"]["RESISTOME_RICHNESS"],
+        resistome_diversity = "{sample_name}" + DEDUP_STRING + config["EXTENSION"]["RESISTOME_DIVERSITY"],
+        mobilome = "{sample_name}" + DEDUP_STRING + config["EXTENSION"]["MOBILOME"]
     params:
         resistome_mobilome_script = workflow.basedir + "/" + config["SCRIPTS"]["GEN_RESISTOME_AND_MOBILOME"],
         output_prefix = "{sample_name}" + DEDUP_STRING
