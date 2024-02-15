@@ -1,0 +1,87 @@
+{
+  "WORKFLOW" :
+  {
+    "WORKDIR" : "test_dir",
+    "DATABASES_DIR" : "databases",
+    "LONG_READS" : "true",
+    "DATA_TYPE": "[pb, hifi, np, illumina]",
+    "DEDUPLICATE" : "true"
+  },
+  
+  "EXTENSION" :
+  {
+    "DUPLICATES" : "_duplicates.csv",
+    "DEDUPLICATED" : "_deduplicated.fastq",
+    "NOT_DEDUPLICATED" : "_NOT_deduplicated.fastq",
+    "ASSEMBLED" : "_assembled.fastq",
+    "A_TO_MEGARES" : "_ato_megares.sam",
+    "A_TO_MGES" : "_ato_MGES.sam",
+    "RESISTOME_DIVERSITY" : "_amr_diversity.csv",
+    "RESISTOME_RICHNESS" : "_amr_richness.csv",
+    "OVERLAP" : "_overlaped_mges.csv",
+    "MOBILOME" : "_mobilome.csv",
+    "COLOCALIZATIONS" : "_colocalizations.csv",
+    "COLOCALIZATIONS_RICHNESS" : "_colocalizations_richness.csv",
+    "GENES_LIST" : "_genes_list.csv",
+    "READS_LENGTH" : "_reads_length.json"
+  },
+
+  "MISC" :
+  {
+    "OVERLAP_THRESHOLD" : 0.5,
+    "GLOBAL_AMR_THRESHOLD" : 0.8,
+    "GLOBAL_MGE_THRESHOLD" : 0.5,
+    "DEDUPLICATION_SIMILARITY_THRESHOLD" : 0.9,
+    "OVERLAP_THRESHOLD_STRATEGY" : "ONE",
+    "PLASMID_FINDER_COMMIT" : "1307168b1ce7418b9f7aa9a017ab3c8eb55bc595"
+  },
+
+  "MINIMAP2" :
+  {
+    "ALIGNER_OPTIONS" : "-ax map-pb",
+    "THREADS" : 12,
+    "USE_SECONDARY_ALIGNMENTS" : "true"
+  },
+
+  "BLAT" :
+  {
+    "THREADS" : 32
+  },
+
+  "SPADES" :
+  {
+    "THREADS" : 32,
+    "MEMORY" : "128",
+    "PHRED" : "33",
+    "KMERS" : "21,33,55,77,127"
+  },
+
+  "SCRIPTS" :
+  {
+    "BASE_PATH" : "",
+    "CLUSTER_READS" : "workflow/scripts/cluster_reads.py",
+    "FIND_DUPLICATES" : "workflow/scripts/run_find_duplicates.sh",
+    "DEDUPLICATE" : "workflow/scripts/deduplicate.py",
+    "GEN_RESISTOME_AND_MOBILOME" : "workflow/scripts/gen_resistome_and_mobilome.py",
+    "FIND_COLOCALIZATIONS" : "workflow/scripts/find_colocalizations.py",
+    "COLOCALIZATIONS_RICHNESS" : "workflow/scripts/colocalization_richness.py",
+    "READS_LENGTH" : "workflow/scripts/read_lengths.py",
+    "BIN_READS" : "workflow/scripts/bin_reads.py",
+    "RUN_BLAT" : "workflow/scripts/run_blat.py",
+    "FIND_OVERLAP" : "workflow/scripts/find_overlap.py",
+    "PLOT_RL" : "workflow/scripts/plot_read_lengths.py",
+    "FASTA2FASTQ" : "workflow/scripts/fasta2fastq.py"
+  },
+
+  "CONDA" :
+  {
+    "ALIGNMENT" : "workflow/envs/alignment.yaml",
+    "ASSEMBLY" : "workflow/envs/assembly.yaml",
+    "DEDUP" : "workflow/envs/deduplication.yaml",
+    "DB" : "workflow/envs/download_databases.yaml",
+    "PIPELINE" : "workflow/envs/pipeline.yaml",
+    "PLOTS" : "workflow/envs/plots.yaml"
+  }
+}
+
+
