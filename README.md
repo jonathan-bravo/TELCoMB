@@ -28,8 +28,8 @@ If all the databases are already available it is possible to avoid re-downloadin
 | Database               | File name in `DATABASES_DIR`         |
 |------------------------|--------------------------------------|
 | MGEs combined database | `mges_combined.fasta`                |
-| MEGARes Database       | `megares_full_database_v2.00.fasta`  |
-| MEGARes Ontology       | `megares_full_annotations_v2.00.csv` |
+| MEGARes Database       | `megares_full_database.fasta`        |
+| MEGARes Ontology       | `megares_full_annotations.csv`       |
 
 
 
