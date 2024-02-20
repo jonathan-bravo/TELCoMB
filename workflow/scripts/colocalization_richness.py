@@ -130,7 +130,7 @@ def main():
     coloc_writer.writerow([])
     coloc_writer.writerow(["Number of unique colocalizations:", len(sorted_unique_colocs)])
     coloc_writer.writerow([])
-    coloc_writer.writerow(["MEGARes group", "MGE gene", "Distance (within " + str(Colocalization.distance_cutoff) + " nts)", "Occurences"])
+    coloc_writer.writerow(["MEGARes group", "MGE gene", "Distance", "Occurences"])
     for coloc in sorted_unique_colocs:
         coloc_writer.writerow([coloc.amr_group, coloc.mge_header, coloc.distance, coloc_counts[coloc]])
 
