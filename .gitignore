@@ -3,9 +3,5 @@ work_dir/*
 workflow/scripts/__pycache__/*
 **/.DS_Store
 .vscode/*
-short_read_test/*
-long_read_test/*
-timing_tests/*
 benchmarks/*
-stderr_files/*
-timing_test.sh
+databases/*
