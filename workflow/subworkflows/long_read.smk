@@ -47,7 +47,7 @@ rule bin_reads_by_length:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.bin_reads.benchmark" 
     shell:
         "mkdir -p {params.outdir}; "
-        "{params.bin_script} "
+        "python {params.bin_script} "
         "--infile {input} "
         "--outdir {params.outdir}"
 
@@ -66,7 +66,7 @@ rule cluster_reads:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.cluster_reads.benchmark" 
     shell:
         "mkdir -p {params.outdir}; "
-        "{params.cluster_script} "
+        "python {params.cluster_script} "
         "--indir {params.indir} "
         "--outdir {params.outdir}; "
         "rm -rf {params.indir}; "
@@ -89,7 +89,7 @@ rule blat_clustered_reads:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.blat.benchmark" 
     shell:
         "mkdir -p {params.o}; "
-        "{params.blat_script} "
+        "python {params.blat_script} "
         "--outdir {params.o} "
         "--threads {threads} "
         "--read_clusters {params.rc}; "
@@ -105,17 +105,19 @@ rule find_duplicates:
         similarity_threshold = config["MISC"]["DEDUPLICATION_SIMILARITY_THRESHOLD"],
         pls_dir = tmp_dir + "/{sample_name}_psl_files/",
         outdir = tmp_dir + "/{sample_name}_duplicate_txts/",
-        find_dups_script = workflow.basedir + "/" + config["SCRIPTS"]["FIND_DUPLICATES"]
+        run_find_dups_script = workflow.basedir + "/" + config["SCRIPTS"]["RUN_FIND_DUPLICATES"],
+        find_dupes_script = workflow.basedir + "/" + config["SCRIPTS"]["FIND_DUPLICATES"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DEDUP"]
     benchmark:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.find_dupes.benchmark" 
     shell:
         "mkdir -p {params.outdir}; "
-        "{params.find_dups_script} "
+        "{params.run_find_dups_script} "
         "{params.outdir} "
         "{params.pls_dir} "
-        "{params.similarity_threshold}; "
+        "{params.similarity_threshold} "
+        "{params.find_dupes_script};"
         "rm -rf {params.pls_dir}; "
         "rm {input}"
 
@@ -149,7 +151,7 @@ rule deduplicate:
     benchmark:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.dedup.benchmark" 
     shell:
-        "{params.dedup_script} "
+        "python {params.dedup_script} "
         "--reads {input.reads} "
         "--duplicates {input.duplicates_list} "
         "--out_reads {output.reads} "
