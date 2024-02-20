@@ -16,3 +16,4 @@ dependencies:
   - scikit-learn
   - pandas
   - tqdm
+  - openpyxl

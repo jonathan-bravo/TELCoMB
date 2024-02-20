@@ -18,9 +18,9 @@ def overlapsWith(mge_query_pos, arg_query_pos):
 def overlap_finder(config, single):
     logger = logging.getLogger()
 
-    overlap_threshold = float(config['MISC']['OVERLAP_THRESHOLD'])
-    overlap_mge_threshold = float(config['MISC']['OVERLAP_MGE_THRESHOLD'])
-    overlap_amr_threshold = float(config['MISC']['OVERLAP_AMR_THRESHOLD'])
+    overlap_threshold = float(config['MISC']['GLOBAL_OVERLAP_THRESHOLD'])
+    overlap_mge_threshold = float(config['MISC']['GLOBAL_MGE_THRESHOLD'])
+    overlap_amr_threshold = float(config['MISC']['GLOBAL_AMR_THRESHOLD'])
 
     # Get MGE gene lengths
     logger.info('Reading MGE databases')
