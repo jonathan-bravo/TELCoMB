@@ -62,7 +62,7 @@ def read_megares_v2_ontology(config):
 
 
 def get_resistome(config, sample_name, dedup_string):
-    return sample_name + dedup_string + "_" + config['MISC']['RESISTOME_STRATEGY'] + config['EXTENSION']['RESISTOME_DIVERSITY']
+    return sample_name + dedup_string + config['EXTENSION']['RESISTOME_DIVERSITY']
 
 
 def get_reads_length(config, sample_name):

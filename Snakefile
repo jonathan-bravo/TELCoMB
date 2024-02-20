@@ -15,8 +15,8 @@ import os, ast, glob
 configfile: "config/config.json"
 workdir: config["WORKFLOW"]["WORKDIR"]
 
-databases_dir = config["WORKFLOW"]["DATABASES_DIR"]
-samples_dir = "samples"
+databases_dir = workflow.basedir + "/" + config["WORKFLOW"]["DATABASES_DIR"]
+samples_dir = workflow.basedir + "/" + config["WORKFLOW"]["SAMPLEDIR"] + "/samples"
 tmp_dir = "tmp"
 log_dir = "logs"
 
@@ -211,7 +211,7 @@ rule find_colocalizations:
         config_file = "config.ini"
     output:
         colocalizations = "{sample_name}" + DEDUP_STRING + config["EXTENSION"]["COLOCALIZATIONS"],
-        genes_list = "{sample_name}" + DEDUP_STRING + config["EXTENSION"]["GENES_LIST"]
+        genes_list = temp("{sample_name}" + DEDUP_STRING + config["EXTENSION"]["GENES_LIST"])
     params:
         find_colocalizations_script = workflow.basedir + "/" + config["SCRIPTS"]["FIND_COLOCALIZATIONS"],
         output_directory = os.getcwd()
@@ -266,7 +266,7 @@ rule read_lengths_plot:
     benchmark:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.rl_plot.benchmark" 
     shell:
-        "{params.read_lengths_script} "
+        "python {params.read_lengths_script} "
         "-i {input} "
         "-s {params.std_deviations} "
         "-b {params.num_of_bins} "
@@ -290,7 +290,7 @@ rule violin_plots_notebook:
     benchmark:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".violoin_plot.benchmark" 
     shell:
-        "{params.script} "
+        "python {params.script} "
         "--dedup_string {params.dedup_string} "
         "--config_file {input.config_file} "
         "--output_plot {output} "
@@ -316,7 +316,7 @@ rule heatmap_notebook:
     benchmark:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".heatmap.benchmark" 
     shell:
-        "{params.script} "
+        "python {params.script} "
         "--dedup_string {params.dedup_string} "
         "--config_file {input.config_file} "
         "--output_plot {output} "
@@ -342,7 +342,7 @@ rule colocalization_visualizations_notebook:
     benchmark:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.colocalization_plot.benchmark" 
     shell:
-        "{params.script} "
+        "python {params.script} "
         "--config_file {input.config_file} "
         "--read_lengths {input.read_lengths} "
         "--colocalizations {input.colocalizations} "
@@ -359,8 +359,8 @@ rule get_megares:
         megares_seqs = os.path.join(databases_dir,"megares_modified_database_v2.00.fasta"),
         megares_ontology = os.path.join(databases_dir,"megares_modified_annotations_v2.00.csv")
     params:
-        megares_seqs = "https://www.meglab.org/downloads/megares_v3.00/megares_database_v3.00.fasta",
-        megares_ann = "https://www.meglab.org/downloads/megares_v3.00/megares_annotations_v3.00.csv"
+        megares_seqs = config["DOWNLOADS"]["MEGARES_SEQS"],
+        megares_ann = config["DOWNLOADS"]["MEGARES_ANN"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DB"]
     benchmark:
@@ -374,8 +374,8 @@ rule get_megares:
 
 rule get_plasmid_finder_db:
     params:
-        git_repo = "https://bitbucket.org/genomicepidemiology/plasmidfinder_db.git",
-        commit = config["MISC"]["PLASMID_FINDER_COMMIT"]
+        git_repo = config["DOWNLOADS"]["PLASMID_FINDER_GIT"],
+        commit = config["DOWNLOADS"]["PLASMID_FINDER_COMMIT"]
     output:
         temp(databases_dir + "/plasmid_finder_db.fasta")
     conda:
@@ -397,7 +397,7 @@ rule get_aclame_db:
     output:
         temp(databases_dir + "/aclame_db.fasta")
     params:
-        aclame = "https://drive.google.com/file/d/1ipiFom9ha_87k-bNzK_nIM4ABO1l_WP9/view?usp=sharing"
+        aclame = config["DOWNLOADS"]["ACLAME"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DB"]
     benchmark:
@@ -410,7 +410,7 @@ rule get_iceberg_db:
     output:
         temp(databases_dir + "/iceberg_db.fasta")
     params:
-        iceberg = "https://drive.google.com/file/d/14MNE_738gIgmQU68y-529DitW_zqxIXy/view?usp=sharing"
+        iceberg = config["DOWNLOADS"]["ICEBERG"]
     conda:
         workflow.basedir + "/" + config["CONDA"]["DB"]
     benchmark:

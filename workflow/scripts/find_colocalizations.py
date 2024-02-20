@@ -3,6 +3,8 @@
 from Bio import SeqIO
 import pysam
 import argparse
+import pandas as pd
+import openpyxl
 from common import *
 
 
@@ -75,7 +77,7 @@ def get_colocalizations(config, reads_file_path, to_megares_path, to_mges_path):
             #     continue
 
             # Check coverage
-            if (read.reference_length / (megares_gene_lengths[read.reference_name])) > float(config['MISC']['GLOBAL_AMR_THRESHOLD_COLOCALIZATIONS']):
+            if (read.reference_length / (megares_gene_lengths[read.reference_name])) > float(config['MISC']['GLOBAL_AMR_THRESHOLD']):
                 if read.query_name not in read_to_amr:
                     read_to_amr[read.query_name] = list()
                     amr_positions[read.query_name] = list()
@@ -106,7 +108,7 @@ def get_colocalizations(config, reads_file_path, to_megares_path, to_mges_path):
             # Check coverage
             gene_length = mge_gene_lengths[read.reference_name]
 
-            if (read.reference_length / gene_length) > float(config['MISC']['GLOBAL_MGE_THRESHOLD_COLOCALIZATIONS']):
+            if (read.reference_length / gene_length) > float(config['MISC']['GLOBAL_MGE_THRESHOLD']):
                 if read.query_name not in read_to_mges:
                     read_to_mges[read.query_name] = list()
                     mge_positions[read.query_name] = list()
@@ -180,6 +182,10 @@ def get_colocalizations(config, reads_file_path, to_megares_path, to_mges_path):
                    ';'.join(amr_genes_concatenated_names), ';'.join(amr_genes_concatenated_pos),
                    ';'.join(mge_genes_concatenated_names), ';'.join(mge_genes_concatenated_pos)]
             writer.writerow(row)
+    
+    xlsx = pd.read_csv(genes_list_csv)
+    xlsx_name = f"{'.'.join(genes_list_csv.split('.')[:-1])}.xlsx"
+    xlsx.to_excel(xlsx_name, index=False)
 
     # Candidate colocalizations
     candidate_colocalizations = {k: v for k, v in genes_lists.items() if len(v) >= 2}

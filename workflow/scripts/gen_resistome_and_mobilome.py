@@ -22,9 +22,9 @@ def parse_args():
     return parser.parse_args()
 
 
-def parse_config(config_path):
+def parse_config(args):
     config = ConfigParser()
-    config.read(config_path)
+    config.read(args.config_path)
     config['INPUT'] = dict()
     config['INPUT']['ARGS_SAM_FILE'] = args.args_sam
     config['INPUT']['MGES_SAM_FILE'] = args.mges_sam
@@ -311,7 +311,7 @@ def mobilome_strat(config, AMR_mapped_regions_per_read):
 def main():
     logger = init_logger()
     args = parse_args()
-    config = parse_config(args.config_path)
+    config = parse_config(args)
     # Resistome
     AMR_mapped_regions_per_read = resistome_strat(config)
 
