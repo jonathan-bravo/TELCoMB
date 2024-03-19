@@ -115,7 +115,7 @@ rule find_duplicates:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.find_dupes.benchmark" 
     shell:
         "mkdir -p {params.outdir}; "
-        "{params.run_find_dups_script} "
+        "bash {params.run_find_dups_script} "
         "{params.outdir} "
         "{params.pls_dir} "
         "{params.similarity_threshold} "
