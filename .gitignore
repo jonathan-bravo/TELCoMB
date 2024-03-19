@@ -5,3 +5,4 @@ workflow/scripts/__pycache__/*
 .vscode/*
 benchmarks/*
 databases/*
+test_dir/*
