@@ -6,6 +6,7 @@ from os import listdir, system
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--threshold', required = True)
     parser.add_argument('--indir', required = True)
     parser.add_argument('--outdir', required = True)
     return parser.parse_args()
@@ -15,10 +16,11 @@ def get_bins(indir):
     bins.sort()
     return bins
 
-def get_clusters(bins):
+def get_clusters(bins, threshold):
+    val = 1.99 - threshold
     clusters = []
     while bins:
-        cluster_len = ceil(bins[0]*1.09)
+        cluster_len = ceil(bins[0]*val)
         cluster = [x for x in bins if x <= cluster_len]
         clusters.append(cluster)
         bins = [x for x in bins if x not in cluster]
@@ -34,7 +36,7 @@ def cat_files(clusters, indir, outdir):
 def main():
     args = parse_args()
     bins = get_bins(args.indir)
-    clusters = get_clusters(bins)
+    clusters = get_clusters(bins, args.threshold)
     cat_files(clusters, args.indir, args.outdir)
 
 if __name__ == '__main__':

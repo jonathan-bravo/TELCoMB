@@ -57,6 +57,7 @@ rule cluster_reads:
     output:
         touch(tmp_dir + "/{sample_name}.cluster.reads.done")
     params:
+        similarity_threshold = config["MISC"]["DEDUPLICATION_SIMILARITY_THRESHOLD"],
         indir = tmp_dir + "/{sample_name}_read_bins",
         outdir = tmp_dir + "/{sample_name}_read_clusters",
         cluster_script = workflow.basedir + "/" + config["SCRIPTS"]["CLUSTER_READS"]
@@ -67,6 +68,7 @@ rule cluster_reads:
     shell:
         "mkdir -p {params.outdir}; "
         "python {params.cluster_script} "
+        "--threshold {params.similarity_threshold} "
         "--indir {params.indir} "
         "--outdir {params.outdir}; "
         "rm -rf {params.indir}; "
