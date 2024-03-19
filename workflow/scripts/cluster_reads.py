@@ -6,7 +6,7 @@ from os import listdir, system
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--threshold', required = True)
+    parser.add_argument('--threshold', type = float, required = True)
     parser.add_argument('--indir', required = True)
     parser.add_argument('--outdir', required = True)
     return parser.parse_args()
