@@ -18,42 +18,59 @@ def parse_args():
     return parser.parse_args()
 
 
-def read_megares_v2_ontology(config):
-    # Create ontology dictionary from MEGARes ontology file
-    megares_ontology = dict()
-    hierarchy_dict = dict()
-    with open(config['DATABASE']['MEGARES_ONTOLOGY'], 'r') as ontology_tsv:
-        ontology_reader = csv.reader(ontology_tsv)
-        for row in ontology_reader:
-            # Skip column names
-            if row[0] == "header":
-                continue
+# def read_megares_v2_ontology(config):
+#     # Create ontology dictionary from MEGARes ontology file
+#     megares_ontology = dict()
+#     hierarchy_dict = dict()
+#     with open(config['DATABASE']['MEGARES_ONTOLOGY'], 'r') as ontology_tsv:
+#         ontology_reader = csv.reader(ontology_tsv)
+#         for row in ontology_reader:
+#             # Skip column names
+#             if row[0] == "header":
+#                 continue
 
-            typ = row[1]
-            cl = row[2]
-            mech = row[3]
-            group = row[4]
+#             typ = row[1]
+#             cl = row[2]
+#             mech = row[3]
+#             group = row[4]
 
-            # Set up hiearachy dict. This will be our tree structure
-            if not typ in hierarchy_dict:
-                hierarchy_dict[typ] = {}
+#             # Set up hiearachy dict. This will be our tree structure
+#             if not typ in hierarchy_dict:
+#                 hierarchy_dict[typ] = {}
 
-            if not cl in hierarchy_dict[typ]:
-                hierarchy_dict[typ][cl] = {}
+#             if not cl in hierarchy_dict[typ]:
+#                 hierarchy_dict[typ][cl] = {}
 
-            if not mech in hierarchy_dict[typ][cl]:
-                hierarchy_dict[typ][cl][mech] = []
+#             if not mech in hierarchy_dict[typ][cl]:
+#                 hierarchy_dict[typ][cl][mech] = []
 
-            if not group in hierarchy_dict[typ][cl][mech]:
-                hierarchy_dict[typ][cl][mech].append(group)
+#             if not group in hierarchy_dict[typ][cl][mech]:
+#                 hierarchy_dict[typ][cl][mech].append(group)
 
-            # FIll in our dict
-            megares_ontology[row[0]] = {"class": cl,
-                                        "mechanism": mech,
-                                        "group": group,
-                                        "type": typ
-                                        }
-    return megares_ontology, hierarchy_dict
+#             # FIll in our dict
+#             megares_ontology[row[0]] = {"class": cl,
+#                                         "mechanism": mech,
+#                                         "group": group,
+#                                         "type": typ
+#                                         }
+#     return megares_ontology, hierarchy_dict
+    
+
+def add_genes_to_plot(gene_list, color, label, axis):
+    for gene, position in gene_list:
+        length = int(position.split(':')[1]) - int(position.split(':')[0])
+        start = int(position.split(':')[0])
+        if label == 'ARG':
+            gene_label = gene.split('|')[4]
+        elif label == 'MGE':
+            gene_label = gene
+        element_r = Rectangle((start, curr_y), length, height, facecolor=color, alpha=0.8, edgecolor='black',label=label)
+        axis.add_patch(element_r)
+
+        rx, ry = element_r.get_xy()
+        cx = rx + element_r.get_width() / 2.0
+        cy = ry + element_r.get_height() / 2.0
+        axis.annotate(gene_label, (cx, cy - (height / 2 + 1)), color='black', fontsize=8, ha='center',va='center')
 
 
 def main():
@@ -66,7 +83,10 @@ def main():
     reads_lengths = args.read_lengths
     colocalizations = args.colocalizations
     output_plot = args.output_plot
-    max_length = config["MISC"]["MAX_BP_COLOCALIZATIONS_PLOT"]
+    # max_length = config["MISC"]["MAX_BP_COLOCALIZATIONS_PLOT"]
+
+    global curr_y
+    global height
 
     # Get read lengths
     with open(reads_lengths, 'r') as json_file:
@@ -74,9 +94,9 @@ def main():
 
     ARG_COLOR  = 'red'
     MGE_COLOR  = 'green'
-    READ_COLOR = 'blue'
+    # READ_COLOR = 'blue'
 
-    megares_ontology, _ = read_megares_v2_ontology(config)
+    # megares_ontology, _ = read_megares_v2_ontology(config)
 
     colocalizations_list = [row for row in csv.reader(open(colocalizations, 'rt'))][1:]
 
@@ -88,51 +108,21 @@ def main():
     currentAxis = plt.gca()
     for row in colocalizations_list:
         read_name = row[0]
-        # arg_gene = row[1]
-        # arg_position = row[2]
-        # mge_gene = row[3]
-        # mge_postiion = row[4]
-
         read_length = reads_lengths[read_name]
         used_reads_lengths.append(read_length)
-        read_r = Rectangle((0, curr_y), read_length, height, facecolor='blue', alpha=0.8, edgecolor='black', label='Read')
+        # read_r = Rectangle((0, curr_y), read_length, height, facecolor='blue', alpha=0.8, edgecolor='black', label='Read')
+        read_r = Rectangle((0, curr_y+0.75), read_length, 0.5, facecolor='black', alpha=0.8, edgecolor='black', label='Read')
         currentAxis.add_patch(read_r)
 
         # Get ARGs, MGEs, KEGGs
         args = zip(row[1].split(';'), row[2].split(';'))
         mges = zip(row[3].split(';'), row[4].split(';'))
-        #keggs = zip(row[5].split(';'), row[6].split(';'))
 
         # Add ARGs to plot
-        for arg_gene, arg_position in args:
-            length = int(arg_position.split(':')[1]) - int(arg_position.split(':')[0])
-            start = int(arg_position.split(':')[0])
-            color = ARG_COLOR
-            label = 'ARG'
-            gene_label = arg_gene.split('|')[4]
-            #gene_label = megares_ontology[arg_gene]["class"]
-            element_r = Rectangle((start, curr_y), length, height, facecolor=color, alpha=0.8, edgecolor='black',label=label)
-            currentAxis.add_patch(element_r)
-
-            rx, ry = element_r.get_xy()
-            cx = rx + element_r.get_width() / 2.0
-            cy = ry + element_r.get_height() / 2.0
-            currentAxis.annotate(gene_label, (cx, cy - (height / 2 + 1)), color='black', fontsize=8, ha='center',va='center')
+        add_genes_to_plot(args, ARG_COLOR, 'ARG', currentAxis)
 
         # Add MGEs to plot
-        for mge_gene, mge_position in mges:
-            length = int(mge_position.split(':')[1]) - int(mge_position.split(':')[0])
-            start = int(mge_position.split(':')[0])
-            color = MGE_COLOR
-            label = 'MGE'
-            gene_label = mge_gene
-            element_r = Rectangle((start, curr_y), length, height, facecolor=color, alpha=0.8, edgecolor='black',label=label)
-            currentAxis.add_patch(element_r)
-
-            rx, ry = element_r.get_xy()
-            cx = rx + element_r.get_width() / 2.0
-            cy = ry + element_r.get_height() / 2.0
-            currentAxis.annotate(gene_label, (cx, cy - (height / 2 + 1)), color='black', fontsize=8, ha='center',va='center')
+        add_genes_to_plot(mges, MGE_COLOR, 'MGE', currentAxis)
 
         curr_y += height + padding
 
@@ -154,7 +144,6 @@ def main():
 
     plt.legend(newHandles, newLabels)
     plt.savefig(output_plot)
-    #plt.show()
 
 
 if __name__ == '__main__':
