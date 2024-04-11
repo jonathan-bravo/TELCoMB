@@ -80,8 +80,8 @@ rule blat_clustered_reads:
     output:
         touch(tmp_dir + "/{sample_name}.blat.done")
     params:
-        rc = tmp_dir + "/{sample_name}_read_clusters/",
-        o = tmp_dir + "/{sample_name}_psl_files/",
+        rc = tmp_dir + "/{sample_name}_read_clusters",
+        o = tmp_dir + "/{sample_name}_psl_files",
         blat_script = workflow.basedir + "/" + config["SCRIPTS"]["RUN_BLAT"]
     threads:
         config["BLAT"]["THREADS"]
@@ -105,8 +105,8 @@ rule find_duplicates:
         touch(tmp_dir + "/{sample_name}.find.duplcates.done")
     params:
         similarity_threshold = config["MISC"]["DEDUPLICATION_SIMILARITY_THRESHOLD"],
-        pls_dir = tmp_dir + "/{sample_name}_psl_files/",
-        outdir = tmp_dir + "/{sample_name}_duplicate_txts/",
+        pls_dir = tmp_dir + "/{sample_name}_psl_files",
+        outdir = tmp_dir + "/{sample_name}_duplicate_txts",
         run_find_dups_script = workflow.basedir + "/" + config["SCRIPTS"]["RUN_FIND_DUPLICATES"],
         find_dupes_script = workflow.basedir + "/" + config["SCRIPTS"]["FIND_DUPLICATES"]
     conda:
