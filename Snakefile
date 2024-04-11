@@ -77,6 +77,7 @@ rule align_to_megares:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.ato_megares.benchmark" 
     shell:
         "minimap2 -Y "
+        "--secondary=no "
         "-t {threads} "
         "{params.minimap_flags} "
         "{input.megares_seqs} "
@@ -100,6 +101,7 @@ rule align_to_mges:
         workflow.basedir + "/benchmarks/" + config["WORKFLOW"]["WORKDIR"] + ".{sample_name}.ato_mges.benchmark" 
     shell:
         "minimap2 -Y "
+        "--secondary=no "
         "-t {threads} "
         "{params.minimap_flags} "
         "{input.mges_database} "
