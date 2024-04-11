@@ -5,12 +5,12 @@ script=$4
 
 mkdir -p ${outdir};
 
-for f in ${psl_indir}*;
+for f in ${psl_indir}/*;
 do
     file="$(basename -- $f)";
     cluster=${file%.psl};
     python ${script} \
     -p $f \
     -s ${threshold} \
-    -o ${outdir}${cluster}.dupes.txt;
+    -o ${outdir}/${cluster}.dupes.txt;
 done
