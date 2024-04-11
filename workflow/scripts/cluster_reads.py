@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-import argparse
+from argparse import ArgumentParser
 from math import ceil
 from os import listdir, system
 
 def parse_args():
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser()
     parser.add_argument('--threshold', type = float, required = True)
     parser.add_argument('--indir', required = True)
     parser.add_argument('--outdir', required = True)
