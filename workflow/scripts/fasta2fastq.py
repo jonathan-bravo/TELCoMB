@@ -14,6 +14,7 @@ def parse_args():
 def read_fasta(fasta):
     return ((record.id, str(record.seq)) for record in SeqIO.parse(open(fasta, 'r'), "fasta"))
 
+
 def write_fastq(fasta, fastq):
     with open(fastq, 'w') as f:
         for record in fasta:
