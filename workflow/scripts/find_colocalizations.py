@@ -72,10 +72,6 @@ def get_colocalizations(config, reads_file_path, to_megares_path, to_mges_path):
         for read in to_megares_samfile:
             if read.is_unmapped: continue
 
-            if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
-            # if read.is_secondary:
-            #     continue
-
             # Check coverage
             if (read.reference_length / (megares_gene_lengths[read.reference_name])) > float(config['MISC']['GLOBAL_AMR_THRESHOLD']):
                 if read.query_name not in read_to_amr:
@@ -98,10 +94,6 @@ def get_colocalizations(config, reads_file_path, to_megares_path, to_mges_path):
     with pysam.AlignmentFile(to_mges_path, "r") as mge_alignment_file:
         for read in mge_alignment_file:
             if read.is_unmapped: continue
-
-            if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
-            # if read.is_secondary:
-            #     continue
 
             if read.reference_name in overlapped_mges: continue
 

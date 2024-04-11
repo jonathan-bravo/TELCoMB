@@ -70,8 +70,6 @@ def resistome_strat(config):
     for read in sam_file.fetch():
         if read.is_unmapped: continue
 
-        if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
-
         classname = megares_ontology[read.reference_name]["class"]
         mech = megares_ontology[read.reference_name]["mechanism"]
         group = megares_ontology[read.reference_name]["group"]
@@ -162,7 +160,6 @@ def resistome_strat(config):
         mech_covered_dict[mech]         = mech_dict[mech]
         group_covered_dict[group]       = group_dict[group]
 
-
     # Prepare rows of diversity csv
     csv_rows = list()
     csv_rows.append(['Statistics'])
@@ -207,8 +204,6 @@ def resistome_strat(config):
         csv_writer = csv.writer(out_csv)
         csv_writer.writerows(csv_rows)
 
-    return AMR_mapped_regions_per_read
-
 
 def mobilome_strat(config, AMR_mapped_regions_per_read):
     not_valid_AMR_mapped_region = dict()
@@ -235,8 +230,6 @@ def mobilome_strat(config, AMR_mapped_regions_per_read):
     # Iterate through every read. Accumulate number of reads aligned and number of alignments per aclame mge
     for read in mges_sam_file.fetch():
         if read.is_unmapped: continue
-
-        if config['MISC']['USE_SECONDARY_ALIGNMENTS'].upper() != 'TRUE' and read.is_secondary: continue
 
         if read.reference_name in overlapped_mges: continue
 
@@ -309,11 +302,11 @@ def mobilome_strat(config, AMR_mapped_regions_per_read):
 
 
 def main():
-    logger = init_logger()
+    init_logger()
     args = parse_args()
     config = parse_config(args)
     # Resistome
-    AMR_mapped_regions_per_read = resistome_strat(config)
+    resistome_strat(config)
 
 
 if __name__ == "__main__":
