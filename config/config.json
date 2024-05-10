@@ -83,7 +83,7 @@
     "ASSEMBLED" : "_assembled.fastq",
     "A_TO_MEGARES" : "_ato_megares.sam",
     "A_TO_MGES" : "_ato_MGES.sam",
-    "RESISTOME_DIVERSITY" : "_amr_diversity.csv",
+    "RESISTOME_DIVERSITY" : "_amr_features.csv",
     "RESISTOME_RICHNESS" : "_amr_richness.csv",
     "OVERLAP" : "_overlaped_mges.csv",
     "MOBILOME" : "_mobilome.csv",
