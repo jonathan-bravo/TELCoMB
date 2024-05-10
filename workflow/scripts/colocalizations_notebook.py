@@ -61,51 +61,54 @@ def main():
 
     colocalizations_list = [row for row in csv.reader(open(colocalizations, 'rt'))][1:]
 
-    used_reads_lengths = list()
-    padding = 3
-    height = 2
-    curr_y = 1 + padding
-    plt.figure(figsize=(16, 3*(len(colocalizations_list)/7)))
-    currentAxis = plt.gca()
-    for row in colocalizations_list:
-        read_name = row[0]
-        read_length = reads_lengths[read_name]
-        used_reads_lengths.append(read_length)
-        read_r = Rectangle((0, curr_y+0.75), read_length, 0.5, facecolor='black',
-                           alpha=0.8, edgecolor='black', label='Read')
-        currentAxis.add_patch(read_r)
+    if len(colocalizations_list) > 0:
+        used_reads_lengths = list()
+        padding = 3
+        height = 2
+        curr_y = 1 + padding
+        plt.figure(figsize=(16, 3*(len(colocalizations_list)/7)))
+        currentAxis = plt.gca()
+        for row in colocalizations_list:
+            read_name = row[0]
+            read_length = reads_lengths[read_name]
+            used_reads_lengths.append(read_length)
+            read_r = Rectangle((0, curr_y+0.75), read_length, 0.5, facecolor='black',
+                            alpha=0.8, edgecolor='black', label='Read')
+            currentAxis.add_patch(read_r)
 
-        # Get ARGs, MGEs, KEGGs
-        args = zip(row[1].split(';'), row[2].split(';'))
-        mges = zip(row[3].split(';'), row[4].split(';'))
+            # Get ARGs, MGEs, KEGGs
+            args = zip(row[1].split(';'), row[2].split(';'))
+            mges = zip(row[3].split(';'), row[4].split(';'))
 
-        # Add ARGs to plot
-        add_genes_to_plot(args, ARG_COLOR, 'ARG', currentAxis)
+            # Add ARGs to plot
+            add_genes_to_plot(args, ARG_COLOR, 'ARG', currentAxis)
 
-        # Add MGEs to plot
-        add_genes_to_plot(mges, MGE_COLOR, 'MGE', currentAxis)
+            # Add MGEs to plot
+            add_genes_to_plot(mges, MGE_COLOR, 'MGE', currentAxis)
 
-        curr_y += height + padding
+            curr_y += height + padding
 
 
-    sns.despine(top=True, right=True, left=True, bottom=False)
-    plt.tick_params(axis='y', which='both', left=False, right=False,
-                    labelleft=False)
-    plt.xlim([0, max(used_reads_lengths)])
-    plt.ylim([0, curr_y])
-    # plt.grid(axis='x', color='0.95')
-    plt.xlabel('Read')
+        sns.despine(top=True, right=True, left=True, bottom=False)
+        plt.tick_params(axis='y', which='both', left=False, right=False,
+                        labelleft=False)
+        plt.xlim([0, max(used_reads_lengths)])
+        plt.ylim([0, curr_y])
+        # plt.grid(axis='x', color='0.95')
+        plt.xlabel('Read')
 
-    # remove duplicates from legends
-    handles, labels = currentAxis.get_legend_handles_labels()
-    newLabels, newHandles = [], []
-    for handle, label in zip(handles, labels):
-        if label not in newLabels:
-            newLabels.append(label)
-            newHandles.append(handle)
+        # remove duplicates from legends
+        handles, labels = currentAxis.get_legend_handles_labels()
+        newLabels, newHandles = [], []
+        for handle, label in zip(handles, labels):
+            if label not in newLabels:
+                newLabels.append(label)
+                newHandles.append(handle)
 
-    plt.legend(newHandles, newLabels)
-    plt.savefig(output_plot)
+        plt.legend(newHandles, newLabels)
+        plt.savefig(output_plot)
+    else:
+        plt.savefig(output_plot)
 
 
 if __name__ == '__main__':

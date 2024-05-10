@@ -191,7 +191,7 @@ def resistome_strat(config):
         i += 1
 
     # Write diversity tsv
-    with open(config['OUTPUT']['OUTPUT_PREFIX'] + "_amr_diversity.csv", 'w') as out_csv:
+    with open(config['OUTPUT']['OUTPUT_PREFIX'] + "_amr_features.csv", 'w') as out_csv:
         csv_writer = csv.writer(out_csv)
         csv_writer.writerows(csv_rows)
 

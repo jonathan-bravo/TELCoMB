@@ -143,78 +143,85 @@ def main():
     soil_sample_names = ['SOIL_TELS_II', 'SOIL_PB', 'ILL_SO']
     mock_sample_names = ['MOCK_TELS', 'MOCK_GRIDION', 'MOCK_PROMETHION']
 
-    #Categories for y axis are mechanisms 
-    mechtick_vals = []
-    mechtick_text = []
-    classtick_vals = []
-    classtick_text = []
-    left = 0
-    right = 0
-    mech_names = []
-    for typ in represented_hierarchy:
-        for cl in represented_hierarchy[typ]:
-            left = len(mech_names)
-            right = left + len(represented_hierarchy[typ][cl])
-            classtick_pos = (right + left - 1) / 2.0
-            classtick_vals.append(classtick_pos)
-            classtick_text.append(cl)
-            i = left + 1
-            for mech in represented_hierarchy[typ][cl]:
-                current_tick_pos = (left + i - 1) / 2.0
-                mechtick_vals.append(current_tick_pos)
-                mechtick_text.append(mech)
+    print(represented_hierarchy)
+    if len(represented_hierarchy) > 0:
+        #Categories for y axis are mechanisms 
+        mechtick_vals = []
+        mechtick_text = []
+        classtick_vals = []
+        classtick_text = []
+        left = 0
+        right = 0
+        mech_names = []
+        for typ in represented_hierarchy:
+            for cl in represented_hierarchy[typ]:
+                left = len(mech_names)
+                right = left + len(represented_hierarchy[typ][cl])
+                classtick_pos = (right + left - 1) / 2.0
+                classtick_vals.append(classtick_pos)
+                classtick_text.append(cl)
+                i = left + 1
+                for mech in represented_hierarchy[typ][cl]:
+                    current_tick_pos = (left + i - 1) / 2.0
+                    mechtick_vals.append(current_tick_pos)
+                    mechtick_text.append(mech)
 
-                mech_names.append(mech)
-                i += 1
-                left += 1
+                    mech_names.append(mech)
+                    i += 1
+                    left += 1
 
-    label_heatmap_matrix = []
-    i = 1
-    for typ in represented_hierarchy:
-        for cl in represented_hierarchy[typ]:
-            val = (i / float(len(mech_names) + 1)) 
-            for mech in represented_hierarchy[typ][cl]:
-                label_heatmap_matrix.append([val])
-            i+=1
+        label_heatmap_matrix = []
+        i = 1
+        for typ in represented_hierarchy:
+            for cl in represented_hierarchy[typ]:
+                val = (i / float(len(mech_names) + 1)) 
+                for mech in represented_hierarchy[typ][cl]:
+                    label_heatmap_matrix.append([val])
+                i+=1
 
-    j = 1
-    samples_presence_matrix = []
-    for typ in represented_hierarchy:
-        for cl in represented_hierarchy[typ]:
-            val = j / float(len(mech_names) + 1)
-            for mech in represented_hierarchy[typ][cl]:
-                sample_presence_matrix_row = [0 for x in range(0, len(samples_list))]
-                for i in range(0, len(sample_presence_matrix_row)):
-                    if samples_list[i] in mech_samples[mech]:
-                        sample_presence_matrix_row[i] = val
-                samples_presence_matrix.append(sample_presence_matrix_row)
-            j+=1
+        j = 1
+        samples_presence_matrix = []
+        for typ in represented_hierarchy:
+            for cl in represented_hierarchy[typ]:
+                val = j / float(len(mech_names) + 1)
+                for mech in represented_hierarchy[typ][cl]:
+                    sample_presence_matrix_row = [0 for x in range(0, len(samples_list))]
+                    for i in range(0, len(sample_presence_matrix_row)):
+                        if samples_list[i] in mech_samples[mech]:
+                            sample_presence_matrix_row[i] = val
+                    samples_presence_matrix.append(sample_presence_matrix_row)
+                j+=1
 
-    custom_color_list = ["grey", "lightpink", "palegreen", "peachpuff", "powderblue", "plum",
-                     "lightsalmon", "burlywood", "tomato", "chocolate", "gold", "salmon",
-                     "orchid"]
-    n_bins = len(classtick_text)
-    custom_color = LinearSegmentedColormap.from_list('custom', custom_color_list, N=n_bins)
+        custom_color_list = ["grey", "lightpink", "palegreen", "peachpuff", "powderblue", "plum",
+                        "lightsalmon", "burlywood", "tomato", "chocolate", "gold", "salmon",
+                        "orchid"]
+        n_bins = len(classtick_text)
+        custom_color = LinearSegmentedColormap.from_list('custom', custom_color_list, N=n_bins)
 
-    color_max = np.max(label_heatmap_matrix)
-    color_min = 0
+        # if len(label_heatmap_matrix) > 0:
+        color_max = np.max(label_heatmap_matrix)
+        # else:
+        #     color_max = 1
+        color_min = 0
 
 
-    fig, axs = plt.subplots(1, 2, gridspec_kw={'width_ratios': [1, len(samples_list)]}, figsize=(32, 18))
-    axs[0].imshow(label_heatmap_matrix, aspect='auto', vmin=color_min, vmax=color_max)#,  cmap=custom_color)
-    axs[1].imshow(samples_presence_matrix, aspect='auto', vmin=color_min, vmax=color_max)#, cmap=custom_color)
+        fig, axs = plt.subplots(1, 2, gridspec_kw={'width_ratios': [1, len(samples_list)]}, figsize=(32, 18))
+        axs[0].imshow(label_heatmap_matrix, aspect='auto', vmin=color_min, vmax=color_max)#,  cmap=custom_color)
+        axs[1].imshow(samples_presence_matrix, aspect='auto', vmin=color_min, vmax=color_max)#, cmap=custom_color)
 
-    # Use the pyplot interface to change just one subplot...
-    plt.sca(axs[0])
-    plt.yticks(classtick_vals, classtick_text, color='black', fontsize=20)
-    plt.xticks([], [], color='black')
+        # Use the pyplot interface to change just one subplot...
+        plt.sca(axs[0])
+        plt.yticks(classtick_vals, classtick_text, color='black', fontsize=20)
+        plt.xticks([], [], color='black')
 
-    plt.sca(axs[1])
-    plt.xticks([i for i in range(len(samples_list))], samples_list, color='black', rotation=-45, ha="left", fontsize=20)
-    plt.yticks(mechtick_vals, mechtick_text, color='black')
-    plt.tick_params(axis='y', labelleft=False, labelright=True, left=False, right=True, labelsize=15)
-    plt.gcf().subplots_adjust(bottom=0.15, left=0.15, right=0.75)
-    plt.savefig(output_plot)
+        plt.sca(axs[1])
+        plt.xticks([i for i in range(len(samples_list))], samples_list, color='black', rotation=-45, ha="left", fontsize=20)
+        plt.yticks(mechtick_vals, mechtick_text, color='black')
+        plt.tick_params(axis='y', labelleft=False, labelright=True, left=False, right=True, labelsize=15)
+        plt.gcf().subplots_adjust(bottom=0.15, left=0.15, right=0.75)
+        plt.savefig(output_plot)
+    else:
+        plt.savefig(output_plot)
 
 
 if __name__ == '__main__':
