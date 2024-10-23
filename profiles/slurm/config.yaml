@@ -8,14 +8,16 @@ cluster:
     --mem={resources.mem_mb}
     --time="72:00:00"
     --job-name="TLS-job"
-    --mail-user="jonathan.bravo@ufl.edu"
-    --mail-type="NONE"
+    --mail-user={resources.email}
+    --mail-type={resources.mail_type}
     --output="logs/log_%j.log"
     --error="logs/err_%j.log"
 default-resources:
   - mem_mb=32000
-  - account=boucher
-  - qos=boucher-b
+  - account=
+  - qos=
+  - email=
+  - mail_type="NONE"
 set-threads:
   - meta_spades_assembly=32
   - blat_clustered_reads=32
