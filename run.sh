@@ -29,4 +29,4 @@ module load snakemake
 ##----------------------------------------------------------
 # Run
 
-snakemake --profiles profiles/slurm
+snakemake --profile profiles/slurm
