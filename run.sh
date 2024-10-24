@@ -29,4 +29,11 @@ module load snakemake
 ##----------------------------------------------------------
 # Run
 
-snakemake --profile profiles/slurm
+pip show snakemake-executor-plugin-cluster-generic 1>/dev/null
+if [ $? == 0 ]; then
+   echo "Good to go" #Replace with your actions
+else
+   pip install snakemake-executor-plugin-cluster-generic
+fi
+
+snakemake --profile profiles/slurm/
