@@ -1,0 +1,35 @@
+executor: cluster-generic
+cluster-generic-submit-cmd:
+  mkdir -p logs/ &&
+  sbatch
+    --account={resources.account}
+    --qos={resources.qos}
+    --cpus-per-task="1"
+    --nodes=1
+    --mem={resources.mem_mb}
+    --time="72:00:00"
+    --job-name="TLS-job"
+    --mail-user={resources.email}
+    --mail-type={resources.mail_type}
+    --output="logs/log_%j.log"
+    --error="logs/err_%j.log"
+default-resources:
+  - mem_mb=32000
+  - account=
+  - qos=
+  - email=
+  - mail_type="NONE"
+set-threads:
+  - meta_spades_assembly=32
+  - blat_clustered_reads=32
+  - align_to_megares=32
+  - align_to_mges=32
+set-resources:
+  - meta_spades_assembly:mem_mb=128000
+  - blat_clustered_reads:mem_mb=64000
+  - align_to_megares:mem_mb=64000
+  - align_to_mges:mem_mb=64000
+jobs: 100
+use-conda: True
+latency-wait: 20
+rerun-incomplete: True
