@@ -9,7 +9,7 @@ channels:
   - defaults
 dependencies:
   - python=3.8
-  - samtools=1.9
+  - samtools=1.21
   - biopython
   - pysam
   - scipy
