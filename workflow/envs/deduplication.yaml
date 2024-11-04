@@ -4,12 +4,14 @@
 
 name: deduplication
 channels:
-  - conda-forge
+  - jonathan.bravo
   - bioconda
   - anaconda
 dependencies:
   - biopython
-  - python=3.7
+  - python=3.11
   - blat
   - scipy
   - scikit-learn
+  - libpng=1.6.44
+  - zlib>=1.3
