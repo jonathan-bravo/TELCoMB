@@ -34,6 +34,7 @@ If all the databases are already available it is possible to avoid re-downloadin
 
 
 ```bash
+
 cd TELCoMB
 mamba activate telcomb
 
@@ -45,6 +46,7 @@ mv <your_data>.fastq work_dir/samples
 
 # Run the workflow
 snakemake -c <number of threads available> --use-conda --conda-frontend conda
+
 ```
 
 ### Usage on slurm cluster
