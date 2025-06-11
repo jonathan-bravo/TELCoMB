@@ -1,0 +1,10 @@
+email: ""
+run_id: ""
+output: "results/"
+host_organism: ""
+host_genome: "resources/hosts"
+barcodes: "resources/barcodes"
+reads: "resources/reads"
+databases: "resources/databases"
+similarity_threshold: 0.9
+crop_len: 37
