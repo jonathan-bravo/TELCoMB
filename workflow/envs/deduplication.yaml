@@ -9,7 +9,9 @@ channels:
   - anaconda
 dependencies:
   - biopython
-  - python=3.7
-  - blat
+  - python=3.11
+  - pblat
   - scipy
   - scikit-learn
+  - libpng=1.6.44
+  - zlib>=1.3

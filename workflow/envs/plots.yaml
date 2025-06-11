@@ -10,7 +10,7 @@ channels:
   - plotly
 dependencies:
   - python=3.10
-  - matplotlib
+  - matplotlib=3.9
   - biopython
   - pandas
   - seaborn

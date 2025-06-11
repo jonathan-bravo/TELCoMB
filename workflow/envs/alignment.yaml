@@ -6,7 +6,11 @@ name: alignment
 channels:
   - conda-forge
   - bioconda
-  - anaconda
 dependencies:
   - python=3.8
-  - minimap2
+  - minimap2=2.24
+  - samtools=1.9
+  - bedtools=2.30.0
+  - pandas
+  - pysam
+  - biopython
