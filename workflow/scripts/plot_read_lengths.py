@@ -7,7 +7,7 @@
 import argparse
 from Bio import SeqIO
 import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1.inset_locator import (inset_axes, InsetPosition, mark_inset)
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from common import *
 import os
 
@@ -62,18 +62,20 @@ def main():
     ax.set_yscale(args.y_scale)
 
     if args.inset != 0 and len(inset_read_lengths) > 0:
-        # Setup inset histogram
-        # Make rect
-        inset_ax = plt.axes([0, 0, 1, 1])
+        # Parse position arguments
+        # Example default '0.3,0.5,0.6,0.4' translates to 
+        # 60% width, 40% height, positioned at (0.3, 0.5)
+        pos = [float(s) for s in args.inset_pos.split(',')]
+        
+        # Create the inset axes directly on 'ax'
+        inset_ax = inset_axes(ax, 
+                              width=f"{pos[2]*100}%", 
+                              height=f"{pos[3]*100}%", 
+                              loc='lower left',
+                              bbox_to_anchor=(pos[0], pos[1], 1, 1),
+                              bbox_transform=ax.transAxes)
 
-        # Set pos and relative size
-        inset_pos_list_str = args.inset_pos.split(',')
-        inset_pos_list_float = [float(s) for s in inset_pos_list_str]
-        inset_pos = InsetPosition(ax, inset_pos_list_float)
-        inset_ax.set_axes_locator(inset_pos)
-
-        # Indicate what portion of axes is covered by inset
-        mark_inset(ax, inset_ax, loc1=3, loc2=4, fc="none", ec="0.5")
+        # Plot the histogram in the inset
         inset_ax.hist(inset_read_lengths, bins=args.bins)
 
     # Save

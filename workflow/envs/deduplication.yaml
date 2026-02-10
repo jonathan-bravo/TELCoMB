@@ -13,5 +13,5 @@ dependencies:
   - blat
   - scipy
   - scikit-learn
-  - libpng=1.6.44
+  - libpng=1.6.54
   - zlib>=1.3
