@@ -1,5 +1,5 @@
 cluster:
-  mkdir -p logs/ &&
+  mkdir -p results/logs/ &&
   sbatch
     --account={resources.account}
     --qos={resources.qos}
@@ -7,25 +7,41 @@ cluster:
     --nodes=1
     --mem={resources.mem_mb}
     --time="72:00:00"
-    --job-name="TLS-job"
-    --mail-user="jonathan.bravo@ufl.edu"
-    --mail-type="NONE"
-    --output="logs/log_%j.log"
-    --error="logs/err_%j.log"
+    --job-name={rule}
+    --mail-user={resources.email}
+    --mail-type={resources.mail_type}
+    --output="results/logs/log_{rule}_%j.log"
+    --error="results/logs/err_{rule}_%j.log"
 default-resources:
   - mem_mb=32000
-  - account=boucher
-  - qos=boucher-b
+  - account=
+  - qos=
+  - email=
+  - mail_type="NONE"
 set-threads:
-  - meta_spades_assembly=32
   - blat_clustered_reads=32
-  - align_to_megares=32
-  - align_to_mges=32
+  - align_reads_to_host=32
+  - host_sam_to_bam=32
+  - remove_host_dna=10
+  - non_host_reads=4
+  - align_to_viruses_with_secondary=32
+  - align_to_viruses_for_stats_no_secondary=32
+  - viruses_sam_to_bam=32
+  - viruses_alignment_stats=32
+  - mpileup=10
+  - align_to_target_viruses=32
 set-resources:
-  - meta_spades_assembly:mem_mb=128000
-  - blat_clustered_reads:mem_mb=64000
-  - align_to_megares:mem_mb=64000
-  - align_to_mges:mem_mb=64000
+  - blat_clustered_reads:mem_mb=128000
+  - align_reads_to_host:mem_mb=64000
+  - host_sam_to_bam:mem_mb=64000
+  - remove_host_dna:mem_mb=32000
+  - remove_host_dna:mem_mb=16000
+  - align_to_viruses_with_secondary:mem_mb=64000
+  - align_to_viruses_for_stats_no_secondary:mem_mb=64000
+  - viruses_sam_to_bam:mem_mb=64000
+  - viruses_alignment_stats:mem_mb=64000
+  - mpileup:mem_mb=32000
+  - align_to_target_viruses:mem_mb=64000
 jobs: 100
 use-conda: True
 latency-wait: 20

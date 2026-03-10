@@ -1,0 +1,5 @@
+cores: 120
+use-conda: True
+conda-frontend: conda
+latency-wait: 20
+rerun-incomplete: True
