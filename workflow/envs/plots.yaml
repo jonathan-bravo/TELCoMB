@@ -6,7 +6,6 @@ name: plots
 channels:
   - conda-forge
   - bioconda
-  - anaconda
   - plotly
 dependencies:
   - python=3.10

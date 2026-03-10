@@ -2,7 +2,6 @@ name: trimming
 channels:
   - conda-forge
   - bioconda
-  - anaconda
 dependencies:
   - python=3.11
   - biopython

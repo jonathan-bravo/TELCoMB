@@ -2,6 +2,5 @@ name: default
 channels:
   - conda-forge
   - bioconda
-  - anaconda
 dependencies:
   - python=3.11

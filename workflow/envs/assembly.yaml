@@ -2,7 +2,6 @@ name: assembly
 channels:
   - conda-forge
   - bioconda
-  - anaconda
 dependencies:
   - biopython
   - python=3.8.2
