@@ -109,8 +109,7 @@ def get_colocalizations(config, reads_file_path, to_megares_path, to_mges_path):
                 read_to_mges[read.query_name].append(read.reference_name)
 
     genes_lists = dict()
-    genes_list_csv = config['OUTPUT']['OUT_DIR'] + '/' + config['INPUT']['INPUT_FILE_NAME_EXT'] + config['EXTENSION'][
-        'GENES_LIST']
+    genes_list_csv = config['OUTPUT']['OUT_DIR'] + '/' + config['INPUT']['INPUT_FILE_NAME_EXT'] + config['EXTENSION']['GENES_LIST']
     logger.info("Writing per read genes list to {}".format(genes_list_csv))
     with open(genes_list_csv, 'w') as genes_list_handle:
         writer = csv.writer(genes_list_handle)

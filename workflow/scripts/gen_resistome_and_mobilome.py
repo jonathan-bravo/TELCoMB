@@ -19,6 +19,7 @@ def parse_args():
     parser.add_argument('-o', help='Output Prefix', dest='out_prefix', required=True)
     parser.add_argument('-c', help='Config file', dest='config_path', required=True)
     parser.add_argument('-s', help='Overlapped MGEs list', dest='overlap', required=True)
+    parser.add_argument('-rl', help='Reads lengths', dest='reads_lengths', required=True)
     return parser.parse_args()
 
 
@@ -29,6 +30,7 @@ def parse_config(args):
     config['INPUT']['ARGS_SAM_FILE'] = args.args_sam
     config['INPUT']['MGES_SAM_FILE'] = args.mges_sam
     config['INPUT']['OVERLAP_LIST'] = args.overlap
+    config['INPUT']['READS_LENGTHS_JSON'] = args.reads_lengths
     config['INPUT']['INPUT_FILE_NAME_EXT'] = os.path.basename(args.reads_file)
     config['INPUT']['INPUT_FILE_NAME_NO_EXT'] = os.path.splitext(config['INPUT']['INPUT_FILE_NAME_EXT'])[0]
     config['INPUT']['INPUT_FILE_PATH'] = os.path.dirname(os.path.abspath(args.reads_file))
@@ -57,7 +59,7 @@ def resistome_strat(config):
     megares_ontology, _ = read_megares_v2_ontology(config)
 
     reads_lengths = dict()
-    with open(config['OUTPUT']['OUT_DIR'] + '/' + config['INPUT']['INPUT_FILE_NAME_NO_EXT'] + config['EXTENSION']['READS_LENGTH'], 'rt') as reads_lengths_json_fp:
+    with open(config['INPUT']['READS_LENGTHS_JSON'], 'rt') as reads_lengths_json_fp:
         reads_lengths = json.load(reads_lengths_json_fp)
 
     gene_dict = {}
@@ -216,7 +218,7 @@ def mobilome_strat(config, AMR_mapped_regions_per_read):
 
     # Get reads lengths
     reads_lengths = dict()
-    with open(config['OUTPUT']['OUT_DIR'] + '/' + config['INPUT']['INPUT_FILE_NAME_NO_EXT'] + config['EXTENSION']['READS_LENGTH'], 'rt') as reads_lengths_json_fp:
+    with open(config['INPUT']['READS_LENGTHS_JSON'], 'rt') as reads_lengths_json_fp:
         reads_lengths = json.load(reads_lengths_json_fp)
 
     # Get list of overlapped MGEs

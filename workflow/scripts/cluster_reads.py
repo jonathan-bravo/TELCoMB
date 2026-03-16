@@ -1,18 +1,18 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-from argparse import ArgumentParser
+import argparse
 from math import ceil
 from os import listdir, system
 
 def parse_args():
-    parser = ArgumentParser()
+    parser = argparse.ArgumentParser()
     parser.add_argument('--threshold', type = float, required = True)
     parser.add_argument('--indir', required = True)
     parser.add_argument('--outdir', required = True)
     return parser.parse_args()
 
 def get_bins(indir):
-    bins = [int(f.split('.')[0]) for f in listdir(indir) if f != '.DS_Store']
+    bins = [int(f.split('_')[0]) for f in listdir(indir) if f != '.DS_Store']
     bins.sort()
     return bins
 
@@ -30,8 +30,8 @@ def cat_files(clusters, indir, outdir):
     for cluster in clusters:
         start = cluster[0]
         end = cluster[-1]
-        files = ' '.join([f'{indir}/{x}.rl.bins.fasta.gz' for x in cluster])
-        system(f'cat {files} > {outdir}/{start}.to.{end}.rl.clusters.fasta.gz')
+        files = ' '.join([f'{indir}/{x}_rl_bins.fasta' for x in cluster])
+        system(f'cat {files} > {outdir}/{start}_to_{end}_rl_clusters.fasta')
 
 def main():
     args = parse_args()
