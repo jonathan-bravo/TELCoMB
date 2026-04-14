@@ -31,6 +31,7 @@ HOST = config["host_organism"]
 HOST_FILE = config["host_genome"]
 SIMILARITY = config["similarity_threshold"]
 CROPLEN = config["crop_len"]
+FLOWCELL = config["flowcell"]
 #CUTOFF = config["sftclp_cutoff"]
 
 ALL_INPUT = [
