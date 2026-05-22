@@ -2,7 +2,7 @@ rule concat_parts:
     input:
         f"{READS}/{{sample}}",
     output:
-        temp(f"{OUTDIR}/{{sample}}_concat.fastq.gz"),
+        f"{OUTDIR}/{{sample}}_concat.fastq.gz",
     conda:
         "../envs/default.yaml"
     benchmark:
