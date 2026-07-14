@@ -8,4 +8,4 @@ reads: "resources/reads/"
 databases: "resources/databases"
 similarity_threshold: 0.9
 crop_len: 37
-flowcell: "resources/flowcells/"
+flow_cell: ""

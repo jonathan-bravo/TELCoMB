@@ -10,7 +10,7 @@ chimeric_filename=$7
 dedup_filename=$8
 duplicate_filename=$9
 non_host_read_filename=${10}
-flowcell_filename=${11}
+flow_cell=${11}
 out=${12}
 
 # Sample name
@@ -70,8 +70,8 @@ echo $amr_ontarget_non_host_read
 mges_ontarget_non_host_read=$(echo "$mges_count $non_host_read_count" | awk '{print $1 / $2}')
 echo $mges_ontarget_non_host_read
 
-flowcell_id=$(grep "flow_cell_id=" "$flowcell_filename" | cut -d= -f2-)
-echo $flowcell_id
+flow_cell_id="$flow_cell"
+echo $flow_cell_id
 
 # Concat counts
-printf '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%f,%f,%f,%f\n' "$flowcell_id" "$sample_name" "$amr_count" "$mges_count" "$raw_read_count" "$trim_read_count" "$hard_trim_read_count" "$chimeric_read_count" "$dedup_read_count" "$duplicate_read_count" "$non_host_read_count" "$amr_ontarget_raw_read" "$mges_ontarget_raw_read" "$amr_ontarget_non_host_read" "$mges_ontarget_non_host_read" > "$out"
+printf '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%f,%f,%f,%f\n' "$flow_cell_id" "$sample_name" "$amr_count" "$mges_count" "$raw_read_count" "$trim_read_count" "$hard_trim_read_count" "$chimeric_read_count" "$dedup_read_count" "$duplicate_read_count" "$non_host_read_count" "$amr_ontarget_raw_read" "$mges_ontarget_raw_read" "$amr_ontarget_non_host_read" "$mges_ontarget_non_host_read" > "$out"

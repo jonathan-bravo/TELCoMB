@@ -10,9 +10,10 @@ rule amr_mges_on_target:
        dedup_file=f"{OUTDIR}/{{sample}}_post_dedup_rl.tsv",
        duplicate_file=f"{OUTDIR}/{{sample}}_duplicates.txt",
        non_host_file=f"{OUTDIR}/{{sample}}_non_host_read_count.txt",
-       flowcell=FLOWCELL,
     output:
         f"{OUTDIR}/{{sample}}_telcomb_stats.csv",
+    params:
+        flow_cell = FLOW_CELL
     conda:
         "../envs/default.yaml",
     benchmark:
@@ -31,7 +32,7 @@ rule amr_mges_on_target:
         "{input.dedup_file} "
         "{input.duplicate_file} "
         "{input.non_host_file} "
-        "{input.flowcell} "
+        "{params.flow_cell} "
         "{output}"
 
 rule cat_telcomb_stats:
