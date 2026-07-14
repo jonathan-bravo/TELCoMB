@@ -1,8 +1,38 @@
-.snakemake/*
-work_dir/*
-workflow/scripts/__pycache__/*
+#
+# Python byte-compiled files
+#
+
+__pycache__/
+
+#
+# Inputs
+#
+
+.snakemake
+.snakemake/**
+resources/**
+databases/**
+data/**
+test_dir/**
+work_dir/**
+
+#
+# Outputs 
+#
+
+results/**
+logs/**
+benchmarks/**
+
+#
+# IDE files
+#
+
+**/.vscode
+
+
+#
+# OS files
+#
+
 **/.DS_Store
-.vscode/*
-benchmarks/*
-databases/*
-test_dir/*
